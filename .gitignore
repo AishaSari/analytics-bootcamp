@@ -18,4 +18,4 @@ venv/
 
 # Temporary files
 *.tmp
-*.log
+*.logg
