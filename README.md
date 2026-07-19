@@ -36,10 +36,10 @@ projects/   Larger analytics projects
 * [x] LIKE
 * [x] NULL handling
 * [x] Aggregate functions
-* [ ] GROUP BY
-* [ ] HAVING
-* [ ] JOINs
-* [ ] Subqueries
+* [x] GROUP BY
+* [x] HAVING
+* [x] JOINs
+* [x] Subqueries
 * [ ] Common table expressions
 * [ ] Window functions
 
