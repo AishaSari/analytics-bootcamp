@@ -4,9 +4,9 @@ SELECT
     product_id,
     product_name,
     unit_price,
-CASE
-    WHEN unit_price < 500 THEN 'Cheap'
-    WHEN unit_price BETWEEN 500 AND 2000 THEN 'Medium'
+    CASE
+        WHEN unit_price < 500 THEN 'Cheap'
+        WHEN unit_price BETWEEN 500 AND 2000 THEN 'Medium'
     ELSE 'Expensive'
 END AS price_category
 FROM products;
@@ -16,8 +16,8 @@ FROM products;
 SELECT
     product_id,
     product_name,
-CASE
-    WHEN is_active = 1 THEN 'Active'
+    CASE
+        WHEN is_active = 1 THEN 'Active'
     ELSE 'Inactive'
 END AS activity_status
 FROM products;
@@ -28,9 +28,9 @@ FROM products;
 SELECT
     customer_id,
     COUNT(*) AS total_orders,
-CASE
-    WHEN COUNT(*) = 1 THEN 'New'
-    WHEN COUNT(*) BETWEEN 2 AND 4 THEN 'Regular'
+    CASE
+        WHEN COUNT(*) = 1 THEN 'New'
+        WHEN COUNT(*) BETWEEN 2 AND 4 THEN 'Regular'
     ELSE 'Loyal'
 END AS frequency
 FROM orders
@@ -47,11 +47,11 @@ SELECT
     cat.category_name,
     COUNT(*) AS total_products,
     AVG(p.unit_price) AS average_price,
-CASE
-    WHEN AVG(p.unit_price) < 500 THEN 'Low Value'
-    WHEN AVG(p.unit_price) BETWEEN 500 AND 1500 THEN 'Medium Value'
-    ELSE 'High Value'
-END AS value_category
+    CASE
+        WHEN AVG(p.unit_price) < 500 THEN 'Low Value'
+        WHEN AVG(p.unit_price) BETWEEN 500 AND 1500 THEN 'Medium Value'
+        ELSE 'High Value'
+    END AS value_category
 FROM categories AS cat
 INNER JOIN products AS p
     ON cat.category_id = p.category_id

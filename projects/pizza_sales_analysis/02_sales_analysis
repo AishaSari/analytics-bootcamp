@@ -1,0 +1,140 @@
+/*
+Project: Pizza Sales Analysis
+
+File: 02_sales_analysis.sql
+
+Objective:
+Calculate the restaurant's main sales KPIs.
+*/
+
+
+-- =========================================================
+-- 1. CORE SALES TOTALS
+-- =========================================================
+
+-- Task 1:
+-- Find the total number of orders.
+
+SELECT 
+    COUNT(*) AS total_orders
+FROM orders;
+
+
+-- Task 2:
+-- Find the total number of pizzas sold.
+
+SELECT
+    SUM(quantity) AS total_pizzas_sold
+FROM order_details;
+
+-- Task 3:
+-- Find the total revenue.
+
+SELECT
+    SUM(od.quantity * p.price) AS total_revenue
+FROM order_details AS od
+INNER JOIN pizzas as p
+    ON od.pizza_id = p.pizza_id;
+
+
+-- =========================================================
+-- 2. ORDER-LEVEL AVERAGES
+-- =========================================================
+
+-- Task 4:
+-- Find the average number of pizzas per order.
+
+SELECT
+    AVG(pizzas_per_order) AS average_quantity_per_order
+FROM (
+    SELECT
+        od.order_id,
+        SUM(od.quantity) AS pizzas_per_order
+    FROM order_details AS od
+    GROUP BY od.order_id
+) AS order_quantities;
+
+-- Task 5:
+-- Find the average order value.
+
+SELECT
+    AVG(order_total) AS average_order_value
+FROM (
+    SELECT
+        od.order_id,
+        SUM(od.quantity * p.price) AS order_total
+    FROM order_details AS od
+    INNER JOIN pizzas AS p
+        ON od.pizza_id = p.pizza_id
+    GROUP BY od.order_id
+) AS order_totals;
+
+
+-- =========================================================
+-- 3. ORDER-VALUE ANALYSIS
+-- =========================================================
+
+-- Task 6:
+-- Find the smallest and largest order values.
+
+SELECT
+    MIN(order_totals.order_total) AS smallest_order_value,
+    MAX(order_totals.order_total) AS largest_order_value
+FROM (
+    SELECT
+        od.order_id,
+        SUM(od.quantity * p.price) AS order_total
+    FROM order_details AS od
+    INNER JOIN pizzas AS p
+        ON od.pizza_id = p.pizza_id
+    GROUP BY od.order_id
+) AS order_totals;
+
+-- Task 7:
+-- Show each order's total value and classify it as:
+-- Small: less than 20
+-- Medium: 20 to 50
+-- Large: more than 50
+-- Show only the first 20 orders.
+
+SELECT
+    order_totals.order_id,
+    order_totals.order_total,
+    CASE
+        WHEN order_totals.order_total < 20 THEN 'Small'
+        WHEN order_totals.order_total BETWEEN 20 AND 50 THEN 'Medium'
+        ELSE 'Large'
+    END AS order_size
+FROM (
+    SELECT
+        od.order_id,
+        SUM(od.quantity * p.price) AS order_total
+    FROM order_details AS od
+    INNER JOIN pizzas AS p
+        ON od.pizza_id = p.pizza_id
+    GROUP BY od.order_id
+) AS order_totals
+LIMIT 20;
+
+-- =========================================================
+-- 4. DATA VALIDATION
+-- =========================================================
+
+-- Task 8:
+-- Find how many sales records have a missing quantity or price.
+
+SELECT
+    COUNT(*) AS missing_quantity_or_price_count
+FROM order_details AS od
+INNER JOIN pizzas AS p
+    ON od.pizza_id = p.pizza_id
+WHERE od.quantity IS NULL
+    OR p.price IS NULL;
+
+-- Task 9:
+-- Find how many sales records have a quantity of zero or less.
+
+SELECT
+    COUNT(*) AS zero_or_less_sales_count
+FROM order_details AS od
+WHERE quantity <= 0;
