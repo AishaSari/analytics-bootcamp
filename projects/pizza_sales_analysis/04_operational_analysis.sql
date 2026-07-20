@@ -43,7 +43,6 @@ INNER JOIN order_details AS od
     ON o.order_id = od.order_id
 GROUP BY month;
 
-
 -- =========================================================
 -- 2. WEEKDAY PERFORMANCE
 -- =========================================================
@@ -252,9 +251,6 @@ LIMIT 10;
 -- Task 12:
 -- Among the three busiest hours of the day by total orders,
 -- find the total number of pizzas sold for each category.
-
-
-;
 
 SELECT
     pt.category,
